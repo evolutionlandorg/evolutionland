@@ -60,6 +60,23 @@ Getting started with Evolution Land backend is straightforward:
 
 The script will guide you through setting up MySQL credentials and data directories, and will automatically deploy all necessary services using Docker Compose.
 
+### System Requirements
+
+- Docker and Docker Compose
+- Minimum 4GB RAM
+- 20GB available disk space
+- Internet connection for downloading container images and initial data
+
+### Architecture Overview
+
+Evolution Land backend uses a microservices architecture with the following components:
+
+- **API Server**: Handles game logic and client requests
+- **MySQL Database**: Stores game state and user data
+- **Redis Cache**: Provides high-speed data caching
+- **Apostle SVG Server**: Generates dynamic character images
+
+
 #### New Network Deployment Guide
 
 This guide walks you through deploying Evolution Land on a new blockchain network.
@@ -135,21 +152,6 @@ This guide walks you through deploying Evolution Land on a new blockchain networ
 - Monitor transaction status on your blockchain explorer
 - Consider gas fees and network conditions when deploying contracts and creating assets
 
-### System Requirements
-
-- Docker and Docker Compose
-- Minimum 4GB RAM
-- 20GB available disk space
-- Internet connection for downloading container images and initial data
-
-### Architecture Overview
-
-Evolution Land backend uses a microservices architecture with the following components:
-
-- **API Server**: Handles game logic and client requests
-- **MySQL Database**: Stores game state and user data
-- **Redis Cache**: Provides high-speed data caching
-- **Apostle SVG Server**: Generates dynamic character images
 
 ### License
 
