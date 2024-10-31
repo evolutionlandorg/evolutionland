@@ -1,0 +1,55 @@
+name: evolutionland-backend
+
+services:
+  evo-backend:
+    restart: always
+    image: ghcr.io/evolutionlandorg/evo-backend-server:v0.0.1
+    environment:
+      CRAB_NODE: https://crab-rpc.darwinia.network
+      CRAB_WSS_RPC: wss://crab-rpc.darwinia.network
+      DAEMON_MODE: false
+      ETH_RPC: https://eth.llamarpc.com,https://rpc.ankr.com/eth,https://1rpc.io/eth
+      DATABASE_SHOW_LOG_DEBUG: true
+      TRON_PRO_API_KEY: # see https://developers.tron.network/reference/select-network
+      ETH_WSS_RPC: wss://eth.llamarpc.com
+      EVO_ENV: production
+      GIN_MODE: release
+      LOG_LEVEL: DEBUG
+      MYSQL_DB: ${MYSQL_DB}
+      MYSQL_HOST: evo-mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: evo
+      MYSQL_PASS: ${MYSQL_PASSWORD}
+      REDIS_DATABASE: 0
+      REDIS_HOST: evo-redis
+      SSL: true
+      WEB_HOST: https://portal.evolution.land
+      APOSTLE_PICTURE_SERVER: http://apostle-svg-server:1337
+      API_SERVER_HOST: https://backend.evolution.land
+      
+    ports:
+      - ${API_SERVER_PORT}:2333 
+  apostle-svg-server:
+    image: ghcr.io/evolutionlandorg/evo-apostle-svg:sha-d35cfc9-2
+    ports:
+      - 127.0.0.1:${APOSTLE_SVG_SERVER_PORT}:1337
+  evo-redis:
+    restart: always
+    image: bitnami/redis:7.2.5-debian-12-r0
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - 127.0.0.1:${REDIS_PORT}:6379
+  evo-mysql:
+    restart: always
+    image: bitnami/mysql:8.3.0-debian-12-r9
+    ports:
+      - 127.0.0.1:${MYSQL_PORT}:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: evo
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_AUTHENTICATION_PLUGIN: mysql_native_password
+    volumes:
+      - ${MYSQL_DATA_DIR:-./mysql}:/bitnami/mysql
