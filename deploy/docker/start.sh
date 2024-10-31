@@ -40,7 +40,7 @@ if [ ! -d "$MYSQL_DATA_DIR/data" ]; then
     if [ ! -f "$MYSQL_DATA_DIR/consensus-backend.sql" ]; then
         info "MySQL data directory not found. Starting download process..."
         info "Downloading MySQL initial data from remote server..."
-        wget http://127.0.0.1:9000/mysql_data.tar.gz -O mysql_data.tar.gz || {
+        wget https://gcs.evolution.land/mysql_data.tar.gz -O mysql_data.tar.gz || {
             error "Failed to download MySQL data"
             exit 1
         }
