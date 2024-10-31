@@ -33,6 +33,7 @@ Evolution Land consists of several key repositories that work together to create
 * **[land](https://github.com/evolutionlandorg/land)**: Smart contracts handling the ownership, transfer, and management of virtual land plots.
 
 * **[token-contracts](https://github.com/evolutionlandorg/token-contracts)**: Smart contracts for various tokens used within the Evolution Land ecosystem.
+* **[evo-deploy](https://github.com/evolutionlandorg/evo-deploy)**: Deployment contracts for Evolution Land.
 
 ### Deployment Guide
 
@@ -55,7 +56,84 @@ Getting started with Evolution Land backend is straightforward:
 
 4. Visit [evo-frontend](https://github.com/evolutionlandorg/evo-frontend) to deploy the frontend service.
 
+5. If you want to deploy the contracts, please refer to [evo-deploy](https://github.com/evolutionlandorg/evo-deploy).
+
 The script will guide you through setting up MySQL credentials and data directories, and will automatically deploy all necessary services using Docker Compose.
+
+#### New Network Deployment Guide
+
+This guide walks you through deploying Evolution Land on a new blockchain network.
+
+##### Prerequisites
+- Python and pip installed
+- Access to wallet credentials
+- Docker environment (if using evo-backend)
+
+##### Deployment Steps
+
+1. **Deploy Smart Contracts**
+   - Use [evo-deploy](https://github.com/evolutionlandorg/evo-deploy) to deploy contracts to your target network
+   - Follow the deployment instructions in the evo-deploy repository
+
+2. **Configure Land Resources**
+   - Generate land resource information
+   - Format it according to [init/example_land_resource.json](init/example_land_resource.json) template
+   - Ensure resource distribution matches your game design
+
+3. **Set Up Configuration**
+   - Navigate to [init/conf/conf.py](init/conf/conf.py)
+   - Configure the following:
+     - Wallet address
+     - Private key
+     - New network name
+     - Other network-specific parameters
+
+4. **Generate Land Plots**
+   ```bash
+   cd ./init
+   pip install -r requirements.txt
+   export CHAIN=<new_network_name>
+   python land.py
+   ```
+
+5. **Update Backend Configuration**
+   - Add network configuration JSON file to [evo-backend-server/config](https://github.com/evolutionlandorg/evo-backend-server/tree/main/config)
+   - Redeploy the `evo-backend` service
+   - Initialize land data by running:
+     ```bash
+     docker exec -it evo-backend /app/evo-backend InitLandsFormChain <new_network_name_in_config>
+     ```
+
+6. **Configure and Deploy Apostles**
+   - Update [init/apostle.py](init/apostle.py):
+     - Set desired apostle genes array
+     - Configure apostle owner address
+   - Generate apostles:
+     ```bash
+     cd ./init
+     export CHAIN=<new_network_name>
+     python apostle.py
+     ```
+
+7. **Set Up Marketplace**
+   - List apostles for auction:
+     ```bash
+     cd ./init
+     export CHAIN=<new_network_name>
+     python apostleAuction.py
+     ```
+   - List land plots for auction:
+     ```bash
+     cd ./init
+     export CHAIN=<new_network_name>
+     python clockAuction.py
+     ```
+
+##### Notes
+- Ensure each step completes successfully before proceeding to the next
+- Back up important data before making changes
+- Monitor transaction status on your blockchain explorer
+- Consider gas fees and network conditions when deploying contracts and creating assets
 
 ### System Requirements
 
